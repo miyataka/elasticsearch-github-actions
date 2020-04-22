@@ -10,27 +10,50 @@ fi
 docker network create elastic
 
 PLUGINS_STR=`echo ${PLUGINS} | sed -e 's/\n/ /g'`
+MAJOR_VERSION=`echo ${STACK_VERSION} | cut -c 1`
 
 # single node only
-docker run \
-  --rm \
-  --env "node.name=es1" \
-  --env "cluster.name=docker-elasticsearch" \
-  --env "cluster.initial_master_nodes=es1" \
-  --env "discovery.seed_hosts=es1" \
-  --env "cluster.routing.allocation.disk.threshold_enabled=false" \
-  --env "bootstrap.memory_lock=true" \
-  --env "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
-  --env "xpack.security.enabled=false" \
-  --env "xpack.license.self_generated.type=basic" \
-  --ulimit nofile=65536:65536 \
-  --ulimit memlock=-1:-1 \
-  --publish "9200:9200" \
-  --network=elastic \
-  --name="es1" \
-  --entrypoint="" \
-  docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION} \
-  /bin/sh -vc "elasticsearch-plugin install --batch ${PLUGINS_STR} && /usr/local/bin/docker-entrypoint.sh"
+if [ "x${MAJOR_VERSION}" == 'x6' ]; then
+  docker run \
+    --rm \
+    --env "node.name=es1" \
+    --env "cluster.name=docker-elasticsearch" \
+    --env "cluster.routing.allocation.disk.threshold_enabled=false" \
+    --env "bootstrap.memory_lock=true" \
+    --env "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
+    --env "xpack.security.enabled=false" \
+    --env "xpack.license.self_generated.type=basic" \
+    --ulimit nofile=65536:65536 \
+    --ulimit memlock=-1:-1 \
+    --publish "9200:9200" \
+    --detach \
+    --network=elastic \
+    --name="es1" \
+    --entrypoint="" \
+    docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION} \
+    /bin/sh -vc "elasticsearch-plugin install --batch ${PLUGINS_STR} && /usr/local/bin/docker-entrypoint.sh"
+elif [ "x${MAJOR_VERSION}" == 'x7' ]; then
+  docker run \
+    --rm \
+    --env "node.name=es1" \
+    --env "cluster.name=docker-elasticsearch" \
+    --env "cluster.initial_master_nodes=es1" \
+    --env "discovery.seed_hosts=es1" \
+    --env "cluster.routing.allocation.disk.threshold_enabled=false" \
+    --env "bootstrap.memory_lock=true" \
+    --env "ES_JAVA_OPTS=-Xms1g -Xmx1g" \
+    --env "xpack.security.enabled=false" \
+    --env "xpack.license.self_generated.type=basic" \
+    --ulimit nofile=65536:65536 \
+    --ulimit memlock=-1:-1 \
+    --publish "9200:9200" \
+    --detach \
+    --network=elastic \
+    --name="es1" \
+    --entrypoint="" \
+    docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION} \
+    /bin/sh -vc "elasticsearch-plugin install --batch ${PLUGINS_STR} && /usr/local/bin/docker-entrypoint.sh"
+fi
 
 docker run \
   --network elastic \
