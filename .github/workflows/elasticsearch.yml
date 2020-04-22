@@ -6,6 +6,9 @@ jobs:
   run-action:
     name: Start Elasticsearch
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elasticsearch: ["6.4.3", "7.6.2"]
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -20,7 +23,7 @@ jobs:
       - name: Start Elasticsearch
         uses: ./
         with:
-          stack-version: 6.4.3
+          stack-version: ${{ matrix.elasticsearch }}
           plugins: |
             analysis-kuromoji
 
