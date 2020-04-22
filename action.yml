@@ -1,5 +1,5 @@
-name: 'Run Elasticsearch'
-description: 'Elasticsearch with Plugin'
+name: 'Run Elasticsearch with Plugins'
+description: 'Elasticsearch with Plugins'
 author: 'miyataka'
 
 branding:
