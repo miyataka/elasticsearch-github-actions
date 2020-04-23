@@ -26,6 +26,7 @@ jobs:
           stack-version: ${{ matrix.elasticsearch }}
           plugins: |
             analysis-kuromoji
+            analysis-icu
 
       - name: Elasticsearch is reachable
         run: |
