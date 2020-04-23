@@ -15,11 +15,11 @@ MAJOR_VERSION=`echo ${STACK_VERSION} | cut -c 1`
 PLUGIN_INSTALL_CMD=""
 
 if [ "x${PLUGINS_STR}" != "x" ]; then
-    for i in "${PLUGINS_STR}"
+    ARRAY=(${PLUGINS_STR})
+    for i in "${ARRAY[@]}"
     do
-        PLUGIN_INSTALL_CMD+="elasticsearch-plugin install --batch ${i} &&"
+        PLUGIN_INSTALL_CMD+="elasticsearch-plugin install --batch ${i} && "
     done
-    echo ${PLUGIN_INSTALL_CMD}
 fi
 
 # single node only
