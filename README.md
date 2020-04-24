@@ -12,7 +12,7 @@ steps:
     sudo sysctl -w fs.file-max=262144
     sudo sysctl -w vm.max_map_count=262144
 
-- uses: miyataka/elasticsearch-github-actions
+- uses: miyataka/elasticsearch-github-actions@1
   with:
     stack-version: '7.6.2'
     plugins: 'analysis-kuromoji analysis-icu'
